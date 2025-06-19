@@ -1,0 +1,72 @@
+#define IRR_SENSOR_PIN 12
+#define IRL_SENSOR_PIN 11
+#define IN1 3
+#define IN2 5
+#define IN3 6
+#define IN4 9
+int Rvalue = 0;                  
+int Lvalue = 0;                      
+
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(IRR_SENSOR_PIN, INPUT);
+  pinMode(IRL_SENSOR_PIN, INPUT);
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT); 
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+}
+
+void loop()
+{
+  if(Serial.available() > 0) {
+    char data = Serial.read();
+    if(data == "off") {
+      analogWrite(IN1, 0);
+      analogWrite(IN2, 0);
+      analogWrite(IN3, 0);
+      analogWrite(IN4, 0);
+      delay(10000);
+    }
+  }
+      int Rvalue = 0;                  
+      int Lvalue = 0;
+      Rvalue = digitalRead(IRR_SENSOR_PIN);
+      Lvalue = digitalRead(IRL_SENSOR_PIN);
+
+      if(Rvalue == HIGH && Lvalue == HIGH)
+      {
+        Serial.println("On");
+        analogWrite(IN1, 0);
+        analogWrite(IN2, 40);
+        analogWrite(IN3, 0); //후진
+        analogWrite(IN4, 40);
+        
+      }
+      else if(Lvalue == LOW && Rvalue == HIGH) {
+        Serial.println("left");
+        analogWrite(IN1, 0);
+        analogWrite(IN2, 140);
+        analogWrite(IN3, 40); //후진
+        analogWrite(IN4, 0);
+      }
+
+      else if(Rvalue == LOW && Lvalue == HIGH) {
+        Serial.println("right");
+        analogWrite(IN1, 40);
+        analogWrite(IN2, 0);
+        analogWrite(IN3, 0);
+        analogWrite(IN4, 140);
+      }
+
+      else if(Rvalue == LOW && Lvalue == LOW) {
+        Serial.println("Off");
+        analogWrite(IN1, 40);
+        analogWrite(IN2, 0);
+        analogWrite(IN3, 40);
+        analogWrite(IN4, 0);
+      }
+      
+      
+}
